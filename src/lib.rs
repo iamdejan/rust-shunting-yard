@@ -1,13 +1,38 @@
-pub fn shunting_yard(token: Vec<String>) -> Result<Vec<String>, String> {
-    if token.is_empty() {
-        return Ok(Vec::new());
+use std::vec::Vec;
+use std::collections::LinkedList;
+
+fn is_operand(token: &String) -> bool {
+    return token.parse::<i64>().is_ok();
+}
+
+fn is_operator(token: &String) -> bool {
+    return !is_operand(token);
+}
+
+pub fn shunting_yard(token_list: Vec<String>) -> Result<Vec<String>, String> {
+    if token_list.is_empty() {
+        return Err("Empty token".to_owned());
     }
 
-    let mut result = Vec::new();
-    result.push("1".to_owned());
-    result.push("1".to_owned());
-    result.push("+".to_owned());
-    return Ok(result);
+    let mut output_queue: Vec<String> = Vec::new();
+    let mut operator_stack: LinkedList<String> = LinkedList::new();
+    for i in 0..token_list.len() {
+        let token = token_list[i].clone();
+        if is_operator(&token) {
+            while !operator_stack.is_empty() {
+                let popped_operator: String = operator_stack.pop_back().unwrap();
+                output_queue.push(popped_operator);
+            }
+            operator_stack.push_back(token);
+        } else {
+            output_queue.push(token);
+        }
+    }
+    while !operator_stack.is_empty() {
+        let popped_operator: String = operator_stack.pop_back().unwrap();
+        output_queue.push(popped_operator);
+    }
+    return Ok(output_queue);
 }
 
 #[cfg(test)]
@@ -18,22 +43,38 @@ mod tests {
     fn blank_token() {
         let token = Vec::new();
         let result = shunting_yard(token);
-        assert_eq!(true, result.is_ok());
+        assert_eq!(false, result.is_ok());
     }
 
     #[test]
     fn simple_token() {
-        let mut token: Vec<String> = Vec::new();
-        token.push("1".to_owned());
-        token.push("+".to_owned());
-        token.push("1".to_owned());
+        let token: Vec<String> = "1 + 1".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
         let result = shunting_yard(token);
         assert_eq!(true, result.is_ok());
 
-        let mut expected_token: Vec<String> = Vec::new();
-        expected_token.push("1".to_owned());
-        expected_token.push("1".to_owned());
-        expected_token.push("+".to_owned());
+        let expected_token: Vec<String> = "1 1 +".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        assert_eq!(expected_token, result.unwrap());
+    }
+
+    #[test]
+    fn simple_token_two_operators() {
+        let token: Vec<String> = "1 + 2 - 3".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        let result = shunting_yard(token);
+        assert_eq!(true, result.is_ok());
+
+        let expected_token: Vec<String> = "1 2 + 3 -".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
         assert_eq!(expected_token, result.unwrap());
     }
 }
