@@ -11,7 +11,7 @@ fn is_operator(token: &String) -> bool {
 
 pub fn shunting_yard(token_list: Vec<String>) -> Result<Vec<String>, String> {
     if token_list.is_empty() {
-        return Err("Empty token".to_owned());
+        return Err("Empty token list".to_owned());
     }
 
     let mut output_queue: Vec<String> = Vec::new();
@@ -40,14 +40,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn blank_token() {
+    fn blank_expression() {
         let token = Vec::new();
         let result = shunting_yard(token);
         assert_eq!(false, result.is_ok());
     }
 
     #[test]
-    fn simple_token() {
+    fn simple_expression() {
         let token: Vec<String> = "1 + 1".to_owned()
             .split_ascii_whitespace()
             .map(|s| s.to_string())
@@ -63,7 +63,7 @@ mod tests {
     }
 
     #[test]
-    fn simple_token_two_operators() {
+    fn simple_expression_two_operators() {
         let token: Vec<String> = "1 + 2 - 3".to_owned()
             .split_ascii_whitespace()
             .map(|s| s.to_string())
