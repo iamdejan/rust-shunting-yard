@@ -17,7 +17,7 @@ fn get_operator_level(token: &String) -> i64 {
     return 1;
 }
 
-fn operator_less_precedence(left_token: &String, right_token: &String) -> bool {
+fn left_operator_has_less_precedence(left_token: &String, right_token: &String) -> bool {
     return get_operator_level(left_token) <= get_operator_level(right_token);
 }
 
@@ -31,7 +31,7 @@ pub fn shunting_yard(token_list: Vec<String>) -> Result<Vec<String>, String> {
     for i in 0..token_list.len() {
         let token = token_list[i].clone();
         if is_operator(&token) {
-            if !operator_stack.is_empty() && operator_less_precedence(&token, operator_stack.back().unwrap()) {
+            if !operator_stack.is_empty() && left_operator_has_less_precedence(&token, operator_stack.back().unwrap()) {
                 while !operator_stack.is_empty() {
                     let popped_operator: String = operator_stack.pop_back().unwrap();
                     output_queue.push(popped_operator);
