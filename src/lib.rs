@@ -46,12 +46,10 @@ pub fn shunting_yard(token_list: Vec<String>) -> Result<Vec<String>, String> {
         } else if token == ")" {
             while !operator_stack.is_empty() && operator_stack.back().unwrap() != "(" {
                 let popped_operator: String = operator_stack.pop_back().unwrap();
-                println!("popped operator = {}", popped_operator.clone());
                 output_queue.push(popped_operator);
             }
             operator_stack.pop_back().unwrap();
         }
-        println!("operator stack = {:#?}", operator_stack);
     }
 
     while !operator_stack.is_empty() {
@@ -147,6 +145,22 @@ mod tests {
         assert_eq!(true, result.is_ok());
 
         let expected_token: Vec<String> = "4 18 9 3 - / +".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        assert_eq!(expected_token, result.unwrap());
+    }
+
+    #[test]
+    fn expression_with_parentheses_second_expression() {
+        let token_list: Vec<String> = "( 5 * 4 + 3 ) - 1".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        let result = shunting_yard(token_list);
+        assert_eq!(true, result.is_ok());
+
+        let expected_token: Vec<String> = "5 4 * 3 + 1 -".to_owned()
             .split_ascii_whitespace()
             .map(|s| s.to_string())
             .collect();
