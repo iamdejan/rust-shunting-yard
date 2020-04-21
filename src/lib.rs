@@ -93,6 +93,22 @@ mod tests {
     }
 
     #[test]
+    fn simple_expression_two_operators_multiplication_and_division() {
+        let token_list: Vec<String> = "1 * 2 / 1".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        let result = shunting_yard(token_list);
+        assert_eq!(true, result.is_ok());
+
+        let expected_token: Vec<String> = "1 2 * 1 /".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        assert_eq!(expected_token, result.unwrap());
+    }
+
+    #[test]
     fn expression_two_operators_two_precedences() {
         let token_list: Vec<String> = "1 + 2 * 3".to_owned()
             .split_ascii_whitespace()
