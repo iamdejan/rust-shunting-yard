@@ -182,4 +182,20 @@ mod tests {
             .collect();
         assert_eq!(expected_token, result.unwrap());
     }
+
+    #[test]
+    fn expression_with_parentheses_nested_parentheses_second_expression() {
+        let token_list: Vec<String> = "2 * ( 3 + 5 ) / 4 + 1 * 9 + ( 4 * ( 6 / 3 ) )".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        let result = shunting_yard(token_list);
+        assert_eq!(true, result.is_ok());
+
+        let expected_token: Vec<String> = "2 3 5 + * 4 / 1 9 * + 4 6 3 / * +".to_owned()
+            .split_ascii_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        assert_eq!(expected_token, result.unwrap());
+    }
 }
