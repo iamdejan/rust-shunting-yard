@@ -18,7 +18,7 @@ fn get_operator_level(token: &String) -> i64 {
 }
 
 fn left_operator_has_greater_precedence(left_token: &String, right_token: &String) -> bool {
-    return get_operator_level(left_token) > get_operator_level(right_token);
+    return get_operator_level(left_token) >= get_operator_level(right_token);
 }
 
 pub fn shunting_yard(token_list: Vec<String>) -> Result<Vec<String>, String> {
