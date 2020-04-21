@@ -66,8 +66,8 @@ mod tests {
 
     #[test]
     fn blank_expression() {
-        let token = Vec::new();
-        let result = shunting_yard(token);
+        let token_list = Vec::new();
+        let result = shunting_yard(token_list);
         assert_eq!(false, result.is_ok());
     }
 
