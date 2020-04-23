@@ -1,5 +1,7 @@
 # Rust Shunting Yard Library
 
+[![Build Status](https://travis-ci.org/iamdejan/rust-shunting-yard.svg?branch=master)](https://travis-ci.org/iamdejan/rust-shunting-yard)
+
 <!--- TODO
 This is finished code for my article at LinkedIn: [Computers Can't Do Maths! (CSSE)]()
 --->
